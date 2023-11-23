@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+/// Content View To see the calendar
 struct ContentView: View {
     @StateObject var contentViewModel = ContentViewModel()
     @State private var selectedDate = Date()
@@ -22,6 +23,7 @@ struct ContentView: View {
                     .font(.body)
                     .padding()
 
+                /// Calendar View
                 DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
                     .datePickerStyle(CompactDatePickerStyle())
                     .padding()
@@ -31,6 +33,7 @@ struct ContentView: View {
                         }
                     }
 
+                /// List view
                 List(contentViewModel.covidList, id: \.country) { covid in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(covid.country)
