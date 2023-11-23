@@ -20,7 +20,7 @@ Defino el protocolo
 **/
 
 protocol CovidAPIProtocol {
-    func getCovidList() async -> [Result]?
+    func getCovidList(for date: String) async -> [Result]?
 }
 
 /**
@@ -40,7 +40,7 @@ class CovidRepository: CovidAPIProtocol {
 
     //Creo la funcion para obtener los resultados
 
-    func getCovidList() async -> [Result]? {
-        return await nservice.getCovidList()
+    func getCovidList(for date: String) async -> [Result]? {
+        return await nservice.getCovidList(for: date)
     }
 }
