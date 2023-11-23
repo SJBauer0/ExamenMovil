@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var contentViewModel = ContentViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        List(contentViewModel.covidList, id: \.country) { covid in
+            HStack {
+                Text(covid.country)
+                Text("\(covid.cases.total)")
+            }
+        }.onAppear {
+            Task {
+                await contentViewModel.fetch()
+            }
         }
-        .padding()
     }
 }
 

@@ -26,6 +26,7 @@ class ContentViewModel : ObservableObject {
     @MainActor
     func fetch () async {
         covidList = await covidListRequirement.getCovidList() ?? []
+        debugPrint(covidList)
     }
 }
 

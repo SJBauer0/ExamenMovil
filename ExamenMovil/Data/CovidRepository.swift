@@ -12,7 +12,7 @@ Creo la estrucutra del api
 **/
 
 struct Api {
-    static let base = "https://api.api-ninjas.com/v1/covid19?country="
+    static let base = "https://api.api-ninjas.com/v1/covid19?date="
 }
 
 /**
