@@ -4,21 +4,58 @@
 //
 //  Created by sebastian Jimenez Bauer on 23/11/23.
 //
-
 import SwiftUI
 
 struct ContentView: View {
     @StateObject var contentViewModel = ContentViewModel()
-    
+    @State private var selectedDate = Date()
+
     var body: some View {
-        List(contentViewModel.covidList, id: \.country) { covid in
-            HStack {
-                Text(covid.country)
-                Text("\(covid.cases.total)")
+        NavigationView {
+            VStack {
+                Text("COVID-19 Statistics")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.top, 20)
+                
+                Text("Use Dates from Feburary 2020 to March 2022")
+                    .font(.body)
+                    .padding()
+
+                DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                    .datePickerStyle(CompactDatePickerStyle())
+                    .padding()
+                    .onChange(of: selectedDate) { newDate in
+                        Task {
+                            await contentViewModel.fetch(for: newDate)
+                        }
+                    }
+
+                List(contentViewModel.covidList, id: \.country) { covid in
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(covid.country)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+
+                        Text("Total Cases: \(covid.cases.total)")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+
+                        Text("Region: \(covid.region)")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 8)
+                }
+                .listStyle(PlainListStyle())
+                .padding(.horizontal, 16)
+                .padding(.bottom, 20)
             }
-        }.onAppear {
-            Task {
-                await contentViewModel.fetch()
+            .onAppear {
+                Task {
+                    await contentViewModel.fetch(for: selectedDate)
+                }
             }
         }
     }

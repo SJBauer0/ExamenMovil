@@ -7,30 +7,30 @@
 
 import Foundation
 
-
 /**
-Utilizar protocolo que facilita las pruebas unitarias
-**/
+ Utilizar protocolo que facilita las pruebas unitarias
+ **/
 
 protocol CovidListRequirementProtocol {
-    func getCovidList() async -> [Result]?
+    func getCovidList(for date: String) async -> [Result]?
 }
 
 /**
-Crear el singleton, agregar el metodo y llamar al repositorio
-**/
+ Crear el singleton, agregar el metodo y llamar al repositorio
+ **/
 
-struct CovidListRequirement: CovidListRequirementProtocol {
-        
-    let covidRepository: CovidAPIProtocol
+class CovidListRequirement: CovidListRequirementProtocol {
+    func getCovidList(for date: String) async -> [Result]? {
+        return await covidRepository.getCovidList(for: date)
+    }
 
+    
     static let shared = CovidListRequirement()
     
-    init(covidRepository: CovidAPIProtocol = CovidRepository()) {
+    private let covidRepository: CovidAPIProtocol
+
+    init(covidRepository: CovidAPIProtocol = CovidRepository.shared) {
         self.covidRepository = covidRepository
     }
-    
-    func getCovidList() async -> [Result]? {
-        return await covidRepository.getCovidList()
-    }
 }
+
